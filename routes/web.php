@@ -11,6 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// front page of property
+Route::get('/', 'PropertyController@index');
+
+// property api data
+Route::get('api/property', 'PropertyController@getData');
