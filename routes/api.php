@@ -16,7 +16,3 @@ use Illuminate\Http\Request;
 Route::resource('properties', 'PropertiesController', [
     'except' => ['create', 'edit', 'show']
 ]);
-
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});

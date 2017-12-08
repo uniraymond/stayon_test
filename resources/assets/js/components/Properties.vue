@@ -185,7 +185,7 @@
                     return false;
                 }
 
-                axios.post('/filter', this.property)
+                axios.post('api/filter', this.property)
                     .then(
                         (res) => {
                         this.properties = res.data
