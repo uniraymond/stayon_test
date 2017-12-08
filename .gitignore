@@ -15,3 +15,6 @@ public/css/app.css
 public/js/app.js
 public/mix-manifest.json
 public/.DS_Store
+app/.DS_Store
+app/Http/.DS_Store
+app/Http/Controllers/.DS_Store
