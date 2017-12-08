@@ -102,12 +102,13 @@
             </div>
         </div>
         <div class="row">
-            <span class="sortname sort" v-on:click="sortBy('name')">Name</span>
-            <span class="sortbedroom sort" v-on:click="sortBy('bedroom')">Bedroom</span>
-            <span class="sortbathroom sort" v-on:click="sortBy('bathroom')">Bathroom</span>
-            <span class="sortstorey sort" v-on:click="sortBy('storey')">Storey</span>
-            <span class="sortgarage sort" v-on:click="sortBy('garage')">Garage</span>
-            <span class="sortprice sort" v-on:click="sortBy('price')">Price</span>
+            <label class="col-form-label"> Order By:
+                <button type="button" class="btn btn-default"
+                        v-for="item in sortItems"
+                        v-on:click="invertSort(item)">
+                    {{ item }}<span class="arrow" v-bind:class="sortClass[item] < 0 ? 'dsc' : 'asc'"></span>
+                </button>
+            </label>
         </div>
         <div class="row">
             <div v-if="properties.length > 0">
@@ -136,7 +137,8 @@
         mounted() {
             this.fetchData()
         },
-        data () {
+
+        data: function () {
             return {
                 properties: [],
                 property: {
@@ -148,26 +150,37 @@
                     minprice: '',
                     maxprice: ''
                 },
+                sortItems: ['name', 'bedroom', 'bathroom', 'storey', 'garage', 'price'],
                 bedroomHasError: false,
                 bathroomHasError: false,
                 storeyHasError: false,
                 garageHasError: false,
-                order: 1,
-                sortKey: 'name'
+                sortOrders: true,
+                sortKey: 'name',
+                sortClass: []
             }
         },
 
         computed: {
-           sortProperties: function (key) {
-               function compare(a, b) {
-                   if (a.key < b.key)
-                       return -1;
-                   if (a.key > b.key)
-                       return 1;
-                   return 0;
-               }
-               return this.properties.sort(compare);
+           sortProperties: function () {
+               var sortKey = this.sortKey;
+               var order = this.sortOrders;
+               var data = this.properties;
+
+                data = data.slice().sort(function (a, b) {
+                    a = a[sortKey];
+                    b = b[sortKey];
+                    return ( a === b ? 0 : a > b ? 1 : -1 ) * order;
+                });
+
+               return data;
            }
+        },
+
+        filters: {
+            capitalize: function (str) {
+                return str.charAt(0).toUpperCase() + str.slice(1)
+            }
         },
 
         methods: {
@@ -179,6 +192,17 @@
                 .catch((err) => {
                     console.log(err);
                 })
+            },
+
+            invertSort: function (key) {
+                this.sortOrders = this.sortOrders * (-1);
+                this.sortKey = key;
+                this.sortClass[key] = false;
+
+                if (this.sortOrders) {
+
+                    this.sortClass[key] = this.sortOrders;
+                }
             },
 
             filter () {
