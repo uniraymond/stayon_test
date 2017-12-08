@@ -96,9 +96,17 @@ class PropertiesController extends Controller
         return 204;
     }
 
+    /**
+     * Filter properties.
+     *
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function filter(Request $request)
     {
-        $properties = Property::filter($request);
+        $properties = Property::filerBy($request);
 
+        return $properties;
     }
 }

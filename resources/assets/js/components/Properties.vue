@@ -1,7 +1,4 @@
 <template lang="html">
-    <div id="filter">
-        
-    </div>
     <div id="properties" class="properties">
         <div class="row">
             <div class="card" v-for="property in properties">
