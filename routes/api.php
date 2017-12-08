@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
+// api resource
 Route::resource('properties', 'PropertiesController', [
     'except' => ['create', 'edit', 'show']
 ]);

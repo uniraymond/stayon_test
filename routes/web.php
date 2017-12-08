@@ -15,4 +15,5 @@ Route::get('/', function () {
     return view('property/index');
 });
 
+// api for filter properties
 Route::post('api/filter', 'PropertiesController@filter');
