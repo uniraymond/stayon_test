@@ -71,7 +71,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="col-lg-6 col-md-6 col-sm-12 minprice filterbox"">
-                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">min-price: </label>
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">Min-price: </label>
                 <div class="col-lg-8 col-md-8 col-sm-12">
                     <input type="number"
                            class="form-control"
@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 maxprice filterbox">
-                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">max-price: </label>
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">Max-price: </label>
                 <div class="col-lg-8 col-md-8 col-sm-12">
                     <input type="number"
                            class="form-control"
@@ -106,7 +106,7 @@
                 <button type="button" class="btn btn-default"
                         v-for="item in sortItems"
                         v-on:click="invertSort(item)">
-                    {{ item }}<span class="arrow" v-bind:class="sortClass[item] < 0 ? 'dsc' : 'asc'"></span>
+                    {{ item | capitalize }}<span class="arrow" v-bind:class="sortClass[item] < 0 ? 'dsc' : 'asc'"></span>
                 </button>
             </label>
         </div>
