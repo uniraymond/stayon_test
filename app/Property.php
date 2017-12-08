@@ -33,36 +33,41 @@ class Property extends Model
      */
     public static function filerBy($request)
     {
-        $name = $bedroom = $bathroom = $storey = $garage = $prices = '';
+        $name = $bedroom = $bathroom = $storey = $garage = $prices = $minprice = $maxprice = '';
 
         if ($request->name) {
-
             $name = $request->name;
         }
 
         if ($request->bedroom) {
 
-            $bedroom = is_array($request->bedroom) ? $request->bedroom : array($request->bedroom);
+            $bedroom = explode(",", $request->bedroom);
         }
 
         if ($request->bathroom) {
 
-            $bathroom = is_array($request->bathroom) ? $request->bathroom : array($request->bathroom);
+            $bathroom = explode(",", $request->bathroom);
         }
 
         if ($request->storey) {
 
-            $storey = is_array($request->storey) ? $request->storey : array($request->storey);
+            $storey = explode(",", $request->storey);
         }
 
         if ($request->garage) {
 
-            $garage = is_array($request->garage) ? $request->garage : array($request->garage);
+            $garage = explode(",", $request->garage);
         }
 
         if ($request->minprice && $request->maxprice) {
 
             $prices = array($request->minprice, $request->maxprice);
+        } elseif ($request->minprice && !$request->maxprice) {
+
+            $minprice = $request->minprice;
+        } elseif (!$request->minprice && $request->maxprice) {
+
+            $maxprice = $request->maxprice;
         }
 
         $properties = DB::table('properties')
@@ -84,6 +89,13 @@ class Property extends Model
             ->when($prices, function ($query) use ($prices) {
                 return $query->whereBetween('price', $prices);
             })
+            ->when($minprice, function ($query) use ($minprice) {
+                return $query->where('price', '>=', $minprice);
+            })
+            ->when($maxprice, function ($query) use ($maxprice) {
+                return $query->where('price', '<=', $maxprice);
+            })
+            ->orderBy('name')
             ->get();
 
         return $properties;

@@ -1,5 +1,104 @@
 <template lang="html">
     <div id="properties" class="properties">
+        <div class="filter form-group row">
+            <h2>Search Properties:</h2>
+            <div class="col-lg-4 col-md-6 col-sm-12 name filterbox">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label" for="name">Name: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="name" value=""
+                           v-model="property.name"
+                           placeholder="Name"
+                           v-on:keyup.enter="filter"/>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 bedroom filterbox" v-bind:class="{ 'has-error': bedroomHasError }">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">Bedroom: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="bedroom"
+                           id="bedroom_input"
+                           v-model="property.bedroom"
+                           placeholder="Bedroom numbers"
+                           v-on:keyup.enter="filter"/>
+                    
+                    <small>Can search by multipule numbers, eg: 1, 2, 3</small>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 bathroom filterbox" v-bind:class="{ 'has-error': bathroomHasError }">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">Bathroom: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="bathroom"
+                           id="bathroom_input"
+                           v-model="property.bathroom"
+                           placeholder="Bathroom numbers"
+                           v-on:keyup.enter="filter"/>
+                    
+                    <small>Can search by multipule numbers, eg: 1, 2, 3</small>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 storey filterbox" v-bind:class="{ 'has-error': storeyHasError }">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">Storey: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="storey"
+                           id="storey_input"
+                           v-model="property.storey"
+                           placeholder="Storey numbers"
+                           v-on:keyup.enter="filter"/>
+                    
+                    <small>Can search by multipule numbers, eg: 1, 2, 3</small>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 garage filterbox" v-bind:class="{ 'has-error': garageHasError }">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">Garage: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="garage"
+                           id="garage_input"
+                           v-model="property.garage"
+                           placeholder="Garage numbers"
+                           v-on:keyup.enter="filter"/>
+                    
+                    <small>Can search by multipule numbers, eg: 1, 2, 3</small>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-lg-6 col-md-6 col-sm-12 minprice filterbox"">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">min-price: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="minprice"
+                           id="minprice_input"
+                           v-model="property.minprice"
+                           placeholder="Miniment price"
+                           v-on:keyup.enter="filter"/>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 maxprice filterbox">
+                <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">max-price: </label>
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <input type="text"
+                           class="form-control"
+                           name="maxprice"
+                           id="maxprice_input"
+                           v-model="property.maxprice"
+                           placeholder="Maxmum price"
+                           v-on:keyup.enter="filter"/>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-lg-12 col-md-12 col-sm-12 filter-buttom filterbox">
+                <button type="submit" class="btn btn-primary" v-on:click="filter">Search</button>
+            </div>
+        </div>
         <div class="row">
             <div class="card" v-for="property in properties">
                 <h4>{{ property.name }}</h4>
@@ -24,7 +123,20 @@
         },
         data () {
             return {
-                properties: []
+                properties: [],
+                property: {
+                    name: '',
+                    bedroom: '',
+                    bathroom: '',
+                    storey: '',
+                    garage: '',
+                    minprice: '',
+                    maxprice: ''
+                },
+                bedroomHasError: false,
+                bathroomHasError: false,
+                storeyHasError: false,
+                garageHasError: false
             }
         },
         methods: {
@@ -34,7 +146,31 @@
                         this.properties = res.data
                 })
                 .catch((err) => {
-                    console.log(err)
+                    console.log(err);
+                })
+            },
+
+            filter () {
+                // check bedroom inpub, which is only accept number and comma.
+                if (this.property.bedroom.replace(/^[0-9.,]*/g, '')) {
+                    this.bedroomHasError = true;
+                }
+                if (this.property.bathroom.replace(/^[0-9.,]*/g, '')) {
+                    this.bathroomHasError = true;
+                }
+                if (this.property.storey.replace(/^[0-9.,]*/g, '')) {
+                    this.storeyHasError = true;
+                }
+                if (this.property.garage.replace(/^[0-9.,]*/g, '')) {
+                    this.garageHasError = true;
+                }
+                axios.post('/filter', this.property)
+                    .then(
+                        (res) => {
+                        this.properties = res.data
+                })
+                .catch((err) => {
+                        console.log(err)
                 })
             }
         }
