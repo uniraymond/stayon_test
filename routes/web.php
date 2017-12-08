@@ -11,8 +11,6 @@
 |
 */
 
-// front page of property
-Route::get('/', 'PropertyController@index');
-
-// property api data
-Route::get('api/property', 'PropertyController@getData');
+Route::get('/', function () {
+    return view('property/index');
+});
