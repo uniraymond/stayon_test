@@ -15,7 +15,9 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example', require('./components/Example.vue'));
+// Vue.component('example', require('./components/Example.vue'));
+Vue.component('properties', require('./components/Properties.vue'));
+// Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
 
 const app = new Vue({
     el: '#app'
