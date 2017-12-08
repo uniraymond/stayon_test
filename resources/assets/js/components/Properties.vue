@@ -73,25 +73,27 @@
             <div class="col-lg-6 col-md-6 col-sm-12 minprice filterbox"">
                 <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">min-price: </label>
                 <div class="col-lg-8 col-md-8 col-sm-12">
-                    <input type="text"
+                    <input type="number"
                            class="form-control"
                            name="minprice"
                            id="minprice_input"
                            v-model="property.minprice"
                            placeholder="Miniment price"
                            v-on:keyup.enter="filter"/>
+                    <small>Number only</small>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 maxprice filterbox">
                 <label class="col-lg-4 col-md-4 col-sm-12 col-form-label">max-price: </label>
                 <div class="col-lg-8 col-md-8 col-sm-12">
-                    <input type="text"
+                    <input type="number"
                            class="form-control"
                            name="maxprice"
                            id="maxprice_input"
                            v-model="property.maxprice"
                            placeholder="Maxmum price"
                            v-on:keyup.enter="filter"/>
+                    <small>Number only</small>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -151,19 +153,38 @@
             },
 
             filter () {
-                // check bedroom inpub, which is only accept number and comma.
+                var err = false;
+                // init error class
+                this.bedroomHasError = this.bathroomHasError = this.storeyHasError = this.garageHasError = false;
+
+                // check bedroom input, which is only accept number and comma.
                 if (this.property.bedroom.replace(/^[0-9.,]*/g, '')) {
                     this.bedroomHasError = true;
+                    err = true;
                 }
+
+                // check bathroom input, which is only accept number and comma.
                 if (this.property.bathroom.replace(/^[0-9.,]*/g, '')) {
                     this.bathroomHasError = true;
+                    err = true;
                 }
+
+                // check storey input, which is only accept number and comma.
                 if (this.property.storey.replace(/^[0-9.,]*/g, '')) {
                     this.storeyHasError = true;
+                    err = true;
                 }
+
+                // check garage input, which is only accept number and comma.
                 if (this.property.garage.replace(/^[0-9.,]*/g, '')) {
                     this.garageHasError = true;
+                    err = true;
                 }
+
+                if (err) {
+                    return false;
+                }
+
                 axios.post('/filter', this.property)
                     .then(
                         (res) => {
